@@ -16,14 +16,15 @@ notsobad-jp Organizationの設計原則・開発方針・共通ツール設定�
 
 | 対象 | 配置先 | 利用方法 |
 | --- | --- | --- |
+| Issueテンプレート | [.github/ISSUE_TEMPLATE/task.md](.github/ISSUE_TEMPLATE/task.md) | 概要・完了条件を記載する共通の既定テンプレート |
 | PRテンプレート | [.github/pull_request_template.md](.github/pull_request_template.md) | Organization共通の既定テンプレートとして使用 |
 | pnpmのCI | [.github/workflows/pnpm-ci.yml](.github/workflows/pnpm-ci.yml) | 各リポジトリのWorkflowから明示的に呼び出す |
 
-PRテンプレートの共通利用には、このリポジトリがPublicである必要があります。
+Issue・PRテンプレートの共通利用には、このリポジトリがPublicである必要があります。
 適用先に独自のPRテンプレートがある場合は、そちらが優先されます。
 共通テンプレートを使うリポジトリでは独自テンプレートを削除し、AGENTS.mdなどからこのテンプレートへのURLを参照します。継承したファイルは利用側のcloneには含まれません。
 
-Issueテンプレートは未作成です。追加する場合は`.github/ISSUE_TEMPLATE/`に置きます。適用先でIssuesを有効にし、独自の有効なIssueテンプレートまたは設定がない場合に共通の一式が使われます。
+Issueテンプレートは`.github/ISSUE_TEMPLATE/`で管理します。適用先でIssuesを有効にし、独自の有効なIssueテンプレートまたは設定がない場合に共通の一式が使われます。
 
 ### 共通CIの利用
 

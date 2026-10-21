@@ -1,7 +1,7 @@
 # notsobad-jp 共通開発標準
 
-対象はnotsobad-jp Organization配下のリポジトリです。
-設計原則・開発方針の正本を管理します。
+- 対象はnotsobad-jp Organization配下のリポジトリです。
+- 設計原則・開発方針の正本を管理します。
 
 ## 参照先
 

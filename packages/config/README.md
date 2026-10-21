@@ -20,6 +20,7 @@ pnpm add -D '@notsobad/config@github:notsobad-jp/.github#main&path:/packages/con
 GitHubの`packages/config/`を依存パッケージとして取り込みます。
 `pnpm-lock.yaml`をコミットし、開発環境とCIで同じコミットの設定を使います。
 共通設定を更新するときは、上記の導入コマンドを再実行し、依存先とlockfileの変更を確認します。
+更新時は`pnpm exec tsc --showConfig`による実効設定・検査対象と、Biomeのルール・除外を更新前後で確認します。各リポジトリのCI一式で検証し、lockfileもコミットします。
 
 ## 設定の継承
 

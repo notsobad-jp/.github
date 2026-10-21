@@ -16,8 +16,11 @@
 
 | 文書 | 扱う内容 |
 | --- | --- |
-| [architecture.md](architecture.md) | レイヤーの責務、命名・配置・依存方向 |
-| [typescript.md](typescript.md) | 型・Lint設定と共有時のパスの扱い |
+| [architecture.md](architecture.md) | レイヤーの責務、Repository・DBスキーマの規約 |
+| [typescript.md](typescript.md) | 型・Lint設定、プロパティ順序、Zodモデル |
+| [ui.md](ui.md) | Web UI・コンポーネント・アイコン |
+| [testing.md](testing.md) | 検証の分担、追加コストと保証範囲 |
+| [development.md](development.md) | 資料の管理、検証・push、PR |
 
 ## ツール設定との分担
 

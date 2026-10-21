@@ -16,17 +16,26 @@ notsobad-jp Organizationの設計原則・開発方針・共通ツール設定�
 
 | 対象 | 配置先 | 利用方法 |
 | --- | --- | --- |
-| Issueテンプレートとその設定 | `.github/ISSUE_TEMPLATE/` | Organization共通の既定テンプレートとして使用 |
-| PRテンプレート | `PULL_REQUEST_TEMPLATE.md` | Organization共通の既定テンプレートとして使用 |
-| Reusable Workflows | `.github/workflows/` | 各リポジトリのWorkflowから明示的に呼び出す |
+| PRテンプレート | [.github/pull_request_template.md](.github/pull_request_template.md) | Organization共通の既定テンプレートとして使用 |
+| pnpmのCI | [.github/workflows/pnpm-ci.yml](.github/workflows/pnpm-ci.yml) | 各リポジトリのWorkflowから明示的に呼び出す |
 
-Issue / PRテンプレートの共通利用には、このリポジトリがPublicである必要があります。
-Issueテンプレートを利用するリポジトリではIssuesを有効にします。
+PRテンプレートの共通利用には、このリポジトリがPublicである必要があります。
 適用先に独自のPRテンプレートがある場合は、そちらが優先されます。
-適用先に有効なIssueテンプレートまたは設定がある場合は、そのリポジトリ側のIssueテンプレート一式を使用します。
+共通テンプレートを使うリポジトリでは独自テンプレートを削除し、AGENTS.mdなどからこのテンプレートへのURLを参照します。継承したファイルは利用側のcloneには含まれません。
 
-Reusable Workflowsは`workflow_call`で呼び出し可能にし、
-利用側で参照するWorkflowとバージョンを指定します。
+Issueテンプレートは未作成です。追加する場合は`.github/ISSUE_TEMPLATE/`に置きます。適用先でIssuesを有効にし、独自の有効なIssueテンプレートまたは設定がない場合に共通の一式が使われます。
+
+### 共通CIの利用
+
+利用側の`.github/workflows/`にトリガー・同時実行制御・`permissions: { contents: read }`を定義し、ジョブの`uses`で`notsobad-jp/.github/.github/workflows/pnpm-ci.yml@<commit SHA>`を呼び出します。`<commit SHA>`は利用する共通リポジトリのコミットSHAに置き換え、更新時は変更内容を確認して利用側のCIで検証します。
+
+共通workflowは利用側をcheckoutし、Node.js・pnpmの準備、lockfileを固定した依存の導入、`pnpm run ci`を実行します。利用側のルートには次を用意します。
+
+- Node.jsのバージョンを指定する`.node-version`。
+- pnpmのバージョンを指定する`package.json`の`packageManager`と、プロジェクト固有の検証をまとめる`scripts.ci`。
+- `pnpm-lock.yaml`。
+
+必要な型生成・テスト環境の準備は各プロジェクトの`ci`スクリプトで行います。このworkflowはSecretsの受け渡しを必要とせず、外部サービスに依存しない検証に使います。
 
 ## 参照
 

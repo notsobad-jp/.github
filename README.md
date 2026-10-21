@@ -1,32 +1,26 @@
 # notsobad-jp 共通開発設定
 
-notsobad-jp Organizationの設計原則・開発方針・共通ツール設定と、GitHub標準機能による共通設定を管理します。
+- notsobad-jpの共通開発方針・設定を管理します。
 
-## 開発標準とツール設定
+## 構成
 
-| 場所 | 内容 | 利用方法 |
-| --- | --- | --- |
-| [docs/](docs/README.md) | 設計原則・開発方針 | 設計・実装時に関連する文書を参照 |
-| [packages/config/](packages/config/README.md) | 共通Biome・TypeScript設定 | pnpmでGitHubから導入し、各リポジトリで継承 |
+| 場所 | 内容 |
+| --- | --- |
+| [docs/](docs/README.md) | 共通開発方針 |
+| [packages/config/](packages/config/README.md) | Biome・TypeScript設定 |
+| [.github/ISSUE_TEMPLATE/](.github/ISSUE_TEMPLATE/) | Issueテンプレート |
+| [.github/pull_request_template.md](.github/pull_request_template.md) | PRテンプレート |
+| [.github/workflows/](.github/workflows/) | 再利用可能なGitHub Actions workflow |
 
-共通設定は`@notsobad/config`として利用します。
-導入方法と設定例は[パッケージのREADME](packages/config/README.md)を参照してください。
+## 共通CIの利用
 
-## GitHub共通設定
-
-| 対象 | 配置先 | 利用方法 |
-| --- | --- | --- |
-| Issueテンプレートとその設定 | `.github/ISSUE_TEMPLATE/` | Organization共通の既定テンプレートとして使用 |
-| PRテンプレート | `PULL_REQUEST_TEMPLATE.md` | Organization共通の既定テンプレートとして使用 |
-| Reusable Workflows | `.github/workflows/` | 各リポジトリのWorkflowから明示的に呼び出す |
-
-Issue / PRテンプレートの共通利用には、このリポジトリがPublicである必要があります。
-Issueテンプレートを利用するリポジトリではIssuesを有効にします。
-適用先に独自のPRテンプレートがある場合は、そちらが優先されます。
-適用先に有効なIssueテンプレートまたは設定がある場合は、そのリポジトリ側のIssueテンプレート一式を使用します。
-
-Reusable Workflowsは`workflow_call`で呼び出し可能にし、
-利用側で参照するWorkflowとバージョンを指定します。
+- 利用側のworkflowのジョブから、`uses: notsobad-jp/.github/.github/workflows/pnpm-ci.yml@<commit SHA>`で呼び出します。
+  - 実行イベントと`permissions: { contents: read }`は利用側に定義します。
+  - 更新時は参照SHAの差分を確認し、利用側のCIで検証します。
+- 利用側のルートには次を用意します。
+  - Node.jsのバージョンを指定する`.node-version`。
+  - pnpmのバージョンを指定する`package.json`の`packageManager`と、プロジェクト固有の検証をまとめる`scripts.ci`。
+  - `pnpm-lock.yaml`。
 
 ## 参照
 

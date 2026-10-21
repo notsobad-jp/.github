@@ -20,17 +20,13 @@ notsobad-jp Organizationの設計原則・開発方針・共通ツール設定�
 | PRテンプレート | [.github/pull_request_template.md](.github/pull_request_template.md) | Organization共通の既定テンプレートとして使用 |
 | pnpmのCI | [.github/workflows/pnpm-ci.yml](.github/workflows/pnpm-ci.yml) | 各リポジトリのWorkflowから明示的に呼び出す |
 
-Issue・PRテンプレートの共通利用には、このリポジトリがPublicである必要があります。
-適用先に独自のPRテンプレートがある場合は、そちらが優先されます。
-共通テンプレートを使うリポジトリでは独自テンプレートを削除し、AGENTS.mdなどからこのテンプレートへのURLを参照します。継承したファイルは利用側のcloneには含まれません。
-
-Issueテンプレートは`.github/ISSUE_TEMPLATE/`で管理します。適用先でIssuesを有効にし、独自の有効なIssueテンプレートまたは設定がない場合に共通の一式が使われます。
+テンプレートはGitHubの[組織共通の既定ファイル](https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/creating-a-default-community-health-file)として適用されます。
 
 ### 共通CIの利用
 
 利用側の`.github/workflows/`にトリガー・同時実行制御・`permissions: { contents: read }`を定義し、ジョブの`uses`で`notsobad-jp/.github/.github/workflows/pnpm-ci.yml@<commit SHA>`を呼び出します。`<commit SHA>`は利用する共通リポジトリのコミットSHAに置き換え、更新時は変更内容を確認して利用側のCIで検証します。
 
-共通workflowは利用側をcheckoutし、Node.js・pnpmの準備、lockfileを固定した依存の導入、`pnpm run ci`を実行します。利用側のルートには次を用意します。
+共通workflowは利用側の`pnpm run ci`を実行します。利用側のルートには次を用意します。
 
 - Node.jsのバージョンを指定する`.node-version`。
 - pnpmのバージョンを指定する`package.json`の`packageManager`と、プロジェクト固有の検証をまとめる`scripts.ci`。

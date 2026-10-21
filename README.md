@@ -5,23 +5,19 @@ notsobad-jp Organizationの、GitHub標準機能による共通設定を管理�
 
 ## 配置先
 
-必要な内容を決めてから、次の場所に追加します。現在はこのREADMEのみです。
-
 | 対象 | 配置先 | 利用方法 |
 | --- | --- | --- |
-| Issueテンプレートとその設定 | `.github/ISSUE_TEMPLATE/` | 各リポジトリに独自設定がない場合にGitHubが使用 |
-| PRテンプレート | `PULL_REQUEST_TEMPLATE.md` | 各リポジトリに独自テンプレートがない場合にGitHubが使用 |
+| Issueテンプレートとその設定 | `.github/ISSUE_TEMPLATE/` | Organization共通の既定テンプレートとして使用 |
+| PRテンプレート | `PULL_REQUEST_TEMPLATE.md` | Organization共通の既定テンプレートとして使用 |
 | Reusable Workflows | `.github/workflows/` | 各リポジトリのWorkflowから明示的に呼び出す |
 
 Issue / PRテンプレートの共通利用には、このリポジトリがPublicである必要があります。
-ローカルへのcloneは不要です。Issueテンプレートを利用するリポジトリではIssuesを有効にします。
-適用先に有効なIssueテンプレートまたは設定があれば、共通のIssueテンプレート一式は使われません。
+Issueテンプレートを利用するリポジトリではIssuesを有効にします。
+適用先に独自のPRテンプレートがある場合は、そちらが優先されます。
+適用先に有効なIssueテンプレートまたは設定がある場合は、そのリポジトリ側のIssueテンプレート一式を使用します。
 
-共通Workflowは自動適用されません。実装時は`workflow_call`で呼び出し可能にし、
+Reusable Workflowsは`workflow_call`で呼び出し可能にし、
 利用側で参照するWorkflowとバージョンを指定します。
-
-今回はテンプレート・Workflowを追加せず、既存リポジトリの動作を変えません。
-`profile/`、`CONTRIBUTING.md`、`CODE_OF_CONDUCT.md`も現時点では追加しません。
 
 ## 参照
 

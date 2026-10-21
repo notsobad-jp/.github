@@ -1,27 +1,32 @@
-# notsobad-jp のGitHub共通設定
+# notsobad-jp 共通開発設定
 
-notsobad-jp Organizationの、GitHub標準機能による共通設定を管理します。
-設計原則・開発環境・共通ツール設定はdotfilesで管理します。
+notsobad-jp Organizationの設計原則・開発方針・共通ツール設定と、GitHub標準機能による共通設定を管理します。
 
-## 配置先
+## 開発標準とツール設定
 
-必要な内容を決めてから、次の場所に追加します。現在はこのREADMEのみです。
+| 場所 | 内容 | 利用方法 |
+| --- | --- | --- |
+| [docs/](docs/README.md) | 設計原則・開発方針 | 設計・実装時に関連する文書を参照 |
+| [packages/config/](packages/config/README.md) | 共通Biome・TypeScript設定 | pnpmでGitHubから導入し、各リポジトリで継承 |
+
+共通設定は`@notsobad/config`として利用します。
+導入方法と設定例は[パッケージのREADME](packages/config/README.md)を参照してください。
+
+## GitHub共通設定
 
 | 対象 | 配置先 | 利用方法 |
 | --- | --- | --- |
-| Issueテンプレートとその設定 | `.github/ISSUE_TEMPLATE/` | 各リポジトリに独自設定がない場合にGitHubが使用 |
-| PRテンプレート | `PULL_REQUEST_TEMPLATE.md` | 各リポジトリに独自テンプレートがない場合にGitHubが使用 |
+| Issueテンプレートとその設定 | `.github/ISSUE_TEMPLATE/` | Organization共通の既定テンプレートとして使用 |
+| PRテンプレート | `PULL_REQUEST_TEMPLATE.md` | Organization共通の既定テンプレートとして使用 |
 | Reusable Workflows | `.github/workflows/` | 各リポジトリのWorkflowから明示的に呼び出す |
 
 Issue / PRテンプレートの共通利用には、このリポジトリがPublicである必要があります。
-ローカルへのcloneは不要です。Issueテンプレートを利用するリポジトリではIssuesを有効にします。
-適用先に有効なIssueテンプレートまたは設定があれば、共通のIssueテンプレート一式は使われません。
+Issueテンプレートを利用するリポジトリではIssuesを有効にします。
+適用先に独自のPRテンプレートがある場合は、そちらが優先されます。
+適用先に有効なIssueテンプレートまたは設定がある場合は、そのリポジトリ側のIssueテンプレート一式を使用します。
 
-共通Workflowは自動適用されません。実装時は`workflow_call`で呼び出し可能にし、
+Reusable Workflowsは`workflow_call`で呼び出し可能にし、
 利用側で参照するWorkflowとバージョンを指定します。
-
-今回はテンプレート・Workflowを追加せず、既存リポジトリの動作を変えません。
-`profile/`、`CONTRIBUTING.md`、`CODE_OF_CONDUCT.md`も現時点では追加しません。
 
 ## 参照
 

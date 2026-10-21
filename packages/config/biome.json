@@ -1,0 +1,166 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "off"
+      }
+    },
+    "enabled": false
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "files": {
+    "includes": [
+      "**/*.css",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.json",
+      "**/*.jsonc",
+      "!worker-configuration.d.ts",
+      "!node_modules",
+      "!dist",
+      "!src/presentation/web/public/assets/styles.css",
+      "!.wrangler"
+    ]
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "lineWidth": 80
+  },
+  "linter": {
+    "rules": {
+      "preset": "recommended",
+      "style": {
+        "noNonNullAssertion": "off"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "src/domain/**",
+        "!**/*.test.ts",
+        "!**/*.test.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/application/**",
+                      "**/infrastructure/**",
+                      "**/presentation/**"
+                    ],
+                    "message": "Domainには業務判断とRepositoryのinterfaceを置き、処理の組み立てはApplicationで行ってください。"
+                  },
+                  {
+                    "group": [
+                      "hono",
+                      "hono/**"
+                    ],
+                    "message": "DB・HTTPの処理はInfrastructure・Presentationに置き、Domainには業務判断と契約を置いてください。"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/application/**",
+        "!**/*.test.ts",
+        "!**/*.test.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/infrastructure/**",
+                      "**/presentation/**"
+                    ],
+                    "message": "ApplicationはDomainのRepository interfaceを使い、具体実装を入口から受け取ってください。"
+                  },
+                  {
+                    "group": [
+                      "hono",
+                      "hono/**"
+                    ],
+                    "message": "ApplicationはDomainのRepository interfaceを通じて処理し、HTTPの処理はPresentationに置いてください。"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/infrastructure/**",
+        "!**/*.test.ts",
+        "!**/*.test.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/application/**",
+                      "**/presentation/**"
+                    ],
+                    "message": "InfrastructureはDomainの契約を実装し、業務処理の組み立てはApplicationに置いてください。"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "src/presentation/**",
+        "!**/*.test.ts",
+        "!**/*.test.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "**/infrastructure/**"
+                    ],
+                    "message": "Workerの入口で具体実装を組み立て、PresentationはApplicationとDomainのRepository interfaceを使ってください。"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

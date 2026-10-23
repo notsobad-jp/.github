@@ -6,11 +6,19 @@
 
 | 場所 | 内容 |
 | --- | --- |
-| [docs/](docs/README.md) | 共通開発方針と作業ごとの参照条件 |
+| [docs/](docs/README.md) | 共通開発方針と専門資料 |
 | [packages/config/](packages/config/README.md) | Biome・TypeScript設定 |
 | [.github/ISSUE_TEMPLATE/](.github/ISSUE_TEMPLATE/) | Issueテンプレート |
 | [.github/pull_request_template.md](.github/pull_request_template.md) | PRテンプレート |
 | [.github/workflows/](.github/workflows/) | 再利用可能なGitHub Actions workflow |
+
+## 共通開発方針の利用
+
+- 各リポジトリのAGENTS.mdに次を記載します。
+
+```md
+- セッション開始時に[共通開発標準](https://github.com/notsobad-jp/.github/blob/main/docs/README.md)を確認し、必要な専門資料を参照してください。
+```
 
 ## 共通CIの利用
 

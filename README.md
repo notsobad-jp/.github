@@ -6,7 +6,7 @@
 
 | 場所 | 内容 |
 | --- | --- |
-| [docs/](docs/README.md) | 共通開発方針 |
+| [docs/](docs/README.md) | 共通開発方針と作業ごとの参照条件 |
 | [packages/config/](packages/config/README.md) | Biome・TypeScript設定 |
 | [.github/ISSUE_TEMPLATE/](.github/ISSUE_TEMPLATE/) | Issueテンプレート |
 | [.github/pull_request_template.md](.github/pull_request_template.md) | PRテンプレート |

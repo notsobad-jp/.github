@@ -89,3 +89,21 @@ test("Biome checks the consumer layers and preserves generated-file and test exc
   const restricted = report.diagnostics.filter((diagnostic) => diagnostic.category === "lint/style/noRestrictedImports");
   assert.equal(restricted.length, 4, invalid.output);
 });
+
+test("Biome enforces standard Tailwind values and the neutral palette in consumer JSX", (t) => {
+  const root = fixture(t);
+  const file = "src/presentation/page.tsx";
+  write(root, file, 'export const page = <div class="text-sm text-neutral-600 bg-muted border-border gap-4 w-80 [&>svg]:size-4 hover:text-neutral-900/80 text-white" />;\n');
+  const valid = run(root, "@biomejs/biome", "biome", ["lint", ".", "--reporter=json"]);
+  assert.equal(valid.status, 0, valid.output);
+
+  write(root, file, 'export const page = <div class="text-[13px] bg-[#777] w-[320px] gap-[18px] md:text-[14px] text-gray-600 hover:bg-slate-100/80 border-zinc-200 text-stone-600 text-red-800" />;\n');
+  const invalid = run(root, "@biomejs/biome", "biome", ["lint", ".", "--reporter=json"]);
+  assert.notEqual(invalid.status, 0);
+  const report = JSON.parse(invalid.stdout);
+  for (const category of ["lint/nursery/noTailwindArbitraryValue", "lint/nursery/noTailwindRawColors"]) {
+    const diagnostics = report.diagnostics.filter((diagnostic) => diagnostic.category === category);
+    assert.equal(diagnostics.length, 5, invalid.output);
+    assert.ok(diagnostics.every((diagnostic) => diagnostic.severity === "error"), invalid.output);
+  }
+});

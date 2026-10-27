@@ -9,6 +9,8 @@ jobs:
           cache: pnpm
           node-version-file: .node-version
       - run: pnpm install --frozen-lockfile
+      - name: Check formatting
+        run: pnpm exec biome format .
       - name: Run project CI
         run: pnpm run ci
     timeout-minutes: 20

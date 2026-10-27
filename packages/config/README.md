@@ -31,6 +31,8 @@ pnpm add -D '@notsobad/config@github:notsobad-jp/.github#main&path:/packages/con
   }
   ```
 
+- フォーマットは共通設定に従い、Biomeに任せます。利用側で改行ルールを個別指定しません。
+- CIでは`biome check`で、コードの問題とフォーマットの差分を検査します。
 - プロジェクト固有の差分は、利用側の設定で上書きします。
 - パス別名・型・検査対象と除外は利用側のルートを基準に解決されます。
 - 具体的な設定値は[biome.json](biome.json)・[tsconfig.json](tsconfig.json)を参照してください。

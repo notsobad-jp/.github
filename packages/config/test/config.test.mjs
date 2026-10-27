@@ -107,3 +107,19 @@ test("Biome enforces standard Tailwind values and the neutral palette in consume
     assert.ok(diagnostics.every((diagnostic) => diagnostic.severity === "error"), invalid.output);
   }
 });
+
+test("Biome rejects unformatted consumer JSON and applies its standard array layout", (t) => {
+  const root = fixture(t);
+  const file = "format.json";
+  write(root, file, JSON.stringify({ short: ["a", "b"], long: ["a".repeat(50), "b".repeat(50)] }));
+  const invalid = run(root, "@biomejs/biome", "biome", ["format", file]);
+  assert.notEqual(invalid.status, 0, invalid.output);
+  const written = run(root, "@biomejs/biome", "biome", ["format", "--write", file]);
+  assert.equal(written.status, 0, written.output);
+  const formatted = readFileSync(join(root, file), "utf8");
+  assert.match(formatted, /"short": \["a", "b"\]/);
+  assert.match(formatted, /"long": \[\n/);
+  const valid = run(root, "@biomejs/biome", "biome", ["format", file]);
+  assert.equal(valid.status, 0, valid.output);
+  assert.equal(readFileSync(join(root, file), "utf8"), formatted);
+});

@@ -89,3 +89,37 @@ test("Biome checks the consumer layers and preserves generated-file and test exc
   const restricted = report.diagnostics.filter((diagnostic) => diagnostic.category === "lint/style/noRestrictedImports");
   assert.equal(restricted.length, 4, invalid.output);
 });
+
+test("Biome enforces standard Tailwind values and the neutral palette in consumer JSX", (t) => {
+  const root = fixture(t);
+  const file = "src/presentation/page.tsx";
+  write(root, file, 'export const page = <div class="text-sm text-neutral-600 bg-muted border-border gap-4 w-80 [&>svg]:size-4 hover:text-neutral-900/80 text-white" />;\n');
+  const valid = run(root, "@biomejs/biome", "biome", ["lint", ".", "--reporter=json"]);
+  assert.equal(valid.status, 0, valid.output);
+
+  write(root, file, 'export const page = <div style={{ gap: 18 }} class="text-[13px] bg-[#777] w-[320px] gap-[18px] md:text-[14px] text-gray-600 hover:bg-slate-100/80 border-zinc-200 text-stone-600 text-red-800" />;\n');
+  const invalid = run(root, "@biomejs/biome", "biome", ["lint", ".", "--reporter=json"]);
+  assert.notEqual(invalid.status, 0);
+  const report = JSON.parse(invalid.stdout);
+  for (const [category, count] of [["lint/nursery/noInlineStyles", 1], ["lint/nursery/noTailwindArbitraryValue", 5], ["lint/nursery/noTailwindRawColors", 5]]) {
+    const diagnostics = report.diagnostics.filter((diagnostic) => diagnostic.category === category);
+    assert.equal(diagnostics.length, count, invalid.output);
+    assert.ok(diagnostics.every((diagnostic) => diagnostic.severity === "error"), invalid.output);
+  }
+});
+
+test("Biome rejects unformatted consumer JSON and applies its standard array layout", (t) => {
+  const root = fixture(t);
+  const file = "format.json";
+  write(root, file, JSON.stringify({ short: ["a", "b"], long: ["a".repeat(50), "b".repeat(50)] }));
+  const invalid = run(root, "@biomejs/biome", "biome", ["format", file]);
+  assert.notEqual(invalid.status, 0, invalid.output);
+  const written = run(root, "@biomejs/biome", "biome", ["format", "--write", file]);
+  assert.equal(written.status, 0, written.output);
+  const formatted = readFileSync(join(root, file), "utf8");
+  assert.match(formatted, /"short": \["a", "b"\]/);
+  assert.match(formatted, /"long": \[\n/);
+  const valid = run(root, "@biomejs/biome", "biome", ["format", file]);
+  assert.equal(valid.status, 0, valid.output);
+  assert.equal(readFileSync(join(root, file), "utf8"), formatted);
+});

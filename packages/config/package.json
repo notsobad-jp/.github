@@ -13,6 +13,9 @@
     "tsconfig.json"
   ],
   "scripts": {
+    "ci": "pnpm lint && pnpm test",
+    "fmt": "biome format --write .",
+    "lint": "biome check .",
     "test": "node --test test/*.test.mjs"
   },
   "engines": {

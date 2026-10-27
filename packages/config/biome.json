@@ -28,11 +28,34 @@
     ]
   },
   "formatter": {
+    "enabled": true,
     "indentStyle": "space",
     "lineWidth": 80
   },
   "linter": {
     "rules": {
+      "nursery": {
+        "noInlineStyles": "error",
+        "noTailwindArbitraryValue": "error",
+        "noTailwindRawColors": {
+          "level": "error",
+          "options": {
+            "allowedColors": [
+              "neutral-50",
+              "neutral-100",
+              "neutral-200",
+              "neutral-300",
+              "neutral-400",
+              "neutral-500",
+              "neutral-600",
+              "neutral-700",
+              "neutral-800",
+              "neutral-900",
+              "neutral-950"
+            ]
+          }
+        }
+      },
       "preset": "recommended",
       "style": {
         "noNonNullAssertion": "off"
@@ -41,11 +64,7 @@
   },
   "overrides": [
     {
-      "includes": [
-        "src/domain/**",
-        "!**/*.test.ts",
-        "!**/*.test.tsx"
-      ],
+      "includes": ["src/domain/**", "!**/*.test.ts", "!**/*.test.tsx"],
       "linter": {
         "rules": {
           "style": {
@@ -62,10 +81,7 @@
                     "message": "Domainには業務判断とRepositoryのinterfaceを置き、処理の組み立てはApplicationで行ってください。"
                   },
                   {
-                    "group": [
-                      "hono",
-                      "hono/**"
-                    ],
+                    "group": ["hono", "hono/**"],
                     "message": "DB・HTTPの処理はInfrastructure・Presentationに置き、Domainには業務判断と契約を置いてください。"
                   }
                 ]
@@ -76,11 +92,7 @@
       }
     },
     {
-      "includes": [
-        "src/application/**",
-        "!**/*.test.ts",
-        "!**/*.test.tsx"
-      ],
+      "includes": ["src/application/**", "!**/*.test.ts", "!**/*.test.tsx"],
       "linter": {
         "rules": {
           "style": {
@@ -89,17 +101,11 @@
               "options": {
                 "patterns": [
                   {
-                    "group": [
-                      "**/infrastructure/**",
-                      "**/presentation/**"
-                    ],
+                    "group": ["**/infrastructure/**", "**/presentation/**"],
                     "message": "ApplicationはDomainのRepository interfaceを使い、具体実装を入口から受け取ってください。"
                   },
                   {
-                    "group": [
-                      "hono",
-                      "hono/**"
-                    ],
+                    "group": ["hono", "hono/**"],
                     "message": "ApplicationはDomainのRepository interfaceを通じて処理し、HTTPの処理はPresentationに置いてください。"
                   }
                 ]
@@ -110,11 +116,7 @@
       }
     },
     {
-      "includes": [
-        "src/infrastructure/**",
-        "!**/*.test.ts",
-        "!**/*.test.tsx"
-      ],
+      "includes": ["src/infrastructure/**", "!**/*.test.ts", "!**/*.test.tsx"],
       "linter": {
         "rules": {
           "style": {
@@ -123,10 +125,7 @@
               "options": {
                 "patterns": [
                   {
-                    "group": [
-                      "**/application/**",
-                      "**/presentation/**"
-                    ],
+                    "group": ["**/application/**", "**/presentation/**"],
                     "message": "InfrastructureはDomainの契約を実装し、業務処理の組み立てはApplicationに置いてください。"
                   }
                 ]
@@ -137,11 +136,7 @@
       }
     },
     {
-      "includes": [
-        "src/presentation/**",
-        "!**/*.test.ts",
-        "!**/*.test.tsx"
-      ],
+      "includes": ["src/presentation/**", "!**/*.test.ts", "!**/*.test.tsx"],
       "linter": {
         "rules": {
           "style": {
@@ -150,9 +145,7 @@
               "options": {
                 "patterns": [
                   {
-                    "group": [
-                      "**/infrastructure/**"
-                    ],
+                    "group": ["**/infrastructure/**"],
                     "message": "Workerの入口で具体実装を組み立て、PresentationはApplicationとDomainのRepository interfaceを使ってください。"
                   }
                 ]

@@ -4,25 +4,18 @@
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
-    "lib": [
-      "ES2024"
-    ],
+    "lib": ["ES2024"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "noEmit": true,
     "paths": {
-      "@/*": [
-        "${configDir}/src/*"
-      ]
+      "@/*": ["${configDir}/src/*"]
     },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2024",
-    "types": [
-      "./worker-configuration.d.ts",
-      "node"
-    ]
+    "types": ["./worker-configuration.d.ts", "node"]
   },
   "include": [
     "${configDir}/scripts/**/*.ts",

@@ -97,13 +97,13 @@ test("Biome enforces standard Tailwind values and the neutral palette in consume
   const valid = run(root, "@biomejs/biome", "biome", ["lint", ".", "--reporter=json"]);
   assert.equal(valid.status, 0, valid.output);
 
-  write(root, file, 'export const page = <div class="text-[13px] bg-[#777] w-[320px] gap-[18px] md:text-[14px] text-gray-600 hover:bg-slate-100/80 border-zinc-200 text-stone-600 text-red-800" />;\n');
+  write(root, file, 'export const page = <div style={{ gap: 18 }} class="text-[13px] bg-[#777] w-[320px] gap-[18px] md:text-[14px] text-gray-600 hover:bg-slate-100/80 border-zinc-200 text-stone-600 text-red-800" />;\n');
   const invalid = run(root, "@biomejs/biome", "biome", ["lint", ".", "--reporter=json"]);
   assert.notEqual(invalid.status, 0);
   const report = JSON.parse(invalid.stdout);
-  for (const category of ["lint/nursery/noTailwindArbitraryValue", "lint/nursery/noTailwindRawColors"]) {
+  for (const [category, count] of [["lint/nursery/noInlineStyles", 1], ["lint/nursery/noTailwindArbitraryValue", 5], ["lint/nursery/noTailwindRawColors", 5]]) {
     const diagnostics = report.diagnostics.filter((diagnostic) => diagnostic.category === category);
-    assert.equal(diagnostics.length, 5, invalid.output);
+    assert.equal(diagnostics.length, count, invalid.output);
     assert.ok(diagnostics.every((diagnostic) => diagnostic.severity === "error"), invalid.output);
   }
 });

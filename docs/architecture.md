@@ -4,9 +4,9 @@
 
 | 配置 | 責務 | レイヤー間の参照先 |
 | --- | --- | --- |
-| `src/domain/` | モデル、業務判断、Repositoryの契約 | Domain |
+| `src/domain/` | モデル、業務判断、Repository・トランザクションの契約 | Domain |
 | `src/application/` | 状態の取得、ドメイン操作、保存の組み立て | Application・Domain |
-| `src/infrastructure/` | Repositoryの実装、DB・外部APIの操作とモデルへの変換 | Infrastructure・Domain |
+| `src/infrastructure/` | Repository・トランザクションの実装、DB・外部APIの操作とモデルへの変換 | Infrastructure・Domain |
 | `src/presentation/` | 入力、HTTP応答、画面 | Presentation・Application・Domain |
 | Workerの入口 | binding・設定の取得と具体実装の組み立て | 必要な各レイヤー |
 
@@ -42,13 +42,20 @@
 
 - 契約・実装はUserやChannelなどのリソース単位でまとめ、操作やユースケースごとに別のRepositoryを増やしません。
   - 同じリソースの検索・作成などは、既存のRepositoryに追加します。
-- 一体で保存すべき処理は、主となるリソースのRepository契約にまとめます。
-  - Repository内で原子性を保証し、すべての保存が成功するか、変更が残らないようにします。
-  - DB固有のtransactionや保存準備の手順はApplicationへ公開しません。
 - 単一参照は`find`、複数参照は`findMany`を基本名とします。
 - 対象がない場合、単一参照・更新は例外、複数参照は空配列を返します。
 - 取得値はZodで復元します。
 - 名称と責務は既存の用語に合わせ、単純な中継関数や将来のためだけの抽象化は増やしません。
+
+## トランザクション
+
+- トランザクションの契約はDomainに置きます。
+- Applicationは一体で保存する範囲をトランザクションのブロックで示し、契約を通じて各Repositoryの保存を呼び出します。
+- 実装はInfrastructureに置き、ブロック内の保存がすべて成功するか、変更が残らないように原子性を保証します。
+- DB固有のprepared statementやbatch、保存準備の手順はDomain・Applicationへ公開しません。
+- 契約には対応する操作と保存の確定時点を明記します。
+  - 書き込みをまとめる契約では、ブロック内の個別呼び出しの完了を保存の確定として扱いません。
+  - 保存結果の参照は全体の確定後に行います。
 
 ## DBスキーマ
 

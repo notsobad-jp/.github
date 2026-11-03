@@ -19,6 +19,7 @@
 ```md
 - 共通規約との差分・開発環境・検証手順は、このリポジトリの資料に従います。
 - 設計・仕様の変更時は、関連するdocsも更新します。
+- docsの追加・変更は[docsの書き方](https://github.com/notsobad-jp/.github/blob/main/docs/documentation.md)に従います。
 - 検証の失敗をチェックの無効化や省略で回避しません。
 - 構成・責務・DBの変更は[設計規約](https://github.com/notsobad-jp/.github/blob/main/docs/architecture.md)に従います。
 - TypeScript・JSON・Zodの変更は[TypeScript規約](https://github.com/notsobad-jp/.github/blob/main/docs/typescript.md)に従います。

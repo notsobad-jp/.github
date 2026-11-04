@@ -19,6 +19,7 @@
 - `text-muted-foreground`や`bg-muted`など、Basecoatの役割に応じた標準トークンを優先します。
 - グレースケールを直接指定する場合は、Tailwindの`neutral`に揃えます。`gray`・`slate`・`zinc`・`stone`は使いません。
 - 警告やエラーなどの意味を持つ色は、標準variantや`destructive`などの役割トークンを使います。
+  - 成功・エラーのToastとdestructiveのAlertは、[操作結果と状態の表示](#操作結果と状態の表示)の配色に従います。
 
 ## フォント
 
@@ -49,6 +50,29 @@
 - 画面の状態や注意事項はAlert、操作結果はToastで伝えます。
 - 入力の修正を求めるエラーはフォーム内に表示します。
 - 成功のToastは自動で消し、エラーのToastは利用者が閉じるまで残します。
+- 意味を伝えるため、成功のToastは緑、エラーのToastとdestructiveのAlertは赤にします。
+  - 文字・枠線・薄い同系色の背景を同じ色で揃えます。
+  - [Basecoat標準の配色を変えない原則](#コンポーネントと配置)の例外です。
+- 実装例として、各リポジトリの`styles.css`で`@import "basecoat-css";`の後に次を置きます。
+  - Toastは見出しだけの構成なら外側の色を引き継ぐため、本文への指定は不要です。
+  - Alertの本文はBasecoatが直接色を指定しているため、親の色を引き継がせる指定だけを置きます。
+
+```css
+@layer components {
+  .alert[data-variant="destructive"],
+  .toast[data-category="error"] > .toast-content {
+    @apply border-red-300 bg-red-50 text-red-800;
+  }
+
+  .toast[data-category="success"] > .toast-content {
+    @apply border-green-300 bg-green-50 text-green-800;
+  }
+
+  .alert[data-variant="destructive"] > section {
+    @apply text-inherit;
+  }
+}
+```
 
 ## アクセシビリティ
 

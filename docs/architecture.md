@@ -40,6 +40,8 @@
 
 ## Repository
 
+- Repositoryのinterfaceは対象のDomain内の`*Repository.ts`に定義し、モデルのファイルとは分けます。
+  - Senderなど外部との入出力を表すinterfaceも、対象のDomain内の専用ファイルに定義します。
 - 契約・実装はUserやChannelなどのリソース単位でまとめ、操作やユースケースごとに別のRepositoryを増やしません。
   - 同じリソースの検索・作成などは、既存のRepositoryに追加します。
 - 命名や構成をそろえる場合も、一体で保存すべき処理の原子性を保ちます。

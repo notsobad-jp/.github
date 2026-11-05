@@ -4,7 +4,7 @@
 
 | 配置 | 責務 | レイヤー間の参照先 |
 | --- | --- | --- |
-| `src/domain/` | モデル、業務判断、Repositoryの契約 | Domain |
+| `src/domain/` | モデル、純粋な業務判断・生成、Repositoryの契約 | Domain |
 | `src/application/` | 状態の取得、ドメイン操作、保存の組み立て | Application・Domain |
 | `src/infrastructure/` | Repositoryの実装、DB・外部APIの操作とモデルへの変換 | Infrastructure・Domain |
 | `src/presentation/` | 入力、HTTP応答、画面 | Presentation・Application・Domain |
@@ -15,10 +15,12 @@
 
 ## 業務の表現と依存
 
+- モデルの境界は業務上の責務で決めます。
+  - 同時保存が必要なことだけを理由に、独立したモデルをまとめたり、操作用モデルを増やしたりしません。
 - 別集約はIDで参照します。
 - Applicationの依存はオブジェクトの引数で受け取り、操作の入力と分けます。
 - Domain・Applicationから環境変数やHTTP Contextを参照しません。
-- 日時計算はTemporalを使い、業務判断に必要な時刻はApplicationで一度確定して渡します。
+- 日時計算はTemporalを使います。
 - 業務上の失敗を識別する場合は共通の`DomainError`を使い、それ以外のエラー生成には通常の`Error`を使います。
   - 個別の失敗ごとに独自のエラークラスは作りません。
 - 通常の成功経路を順に実行し、外部処理の失敗は元の例外を伝えます。
@@ -30,6 +32,11 @@
 
 ## Application
 
+- 外部データの取得と時刻・乱数・IDの確定を担当し、Domainの判断・生成に必要な値を渡します。
+  - Domainの処理に必須のモデルを取得できなければ、その処理を呼ばずに中止します。
+  - 業務判断に使う時刻は、操作内で一度確定します。
+- 複数モデルの生成呼び出しと保存の進行、トランザクション範囲を制御します。
+  - モデルの境界とは別に、一体で保存すべき範囲を決め、Repositoryの操作とDBの仕組みで必要な原子性を保ちます。
 - 操作は`src/application/<対象>/<対象>.ts`にまとめ、必要な操作を追加します。原則として操作ごとにファイルを分けません。
   - 例えば、Userの操作は`src/application/user/user.ts`にまとめます。
 - 操作名はCRUD（作成・取得・更新・削除）を基本とし、画面や利用フロー名ではなく、対象データへの操作を表します。
